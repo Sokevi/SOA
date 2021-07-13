@@ -17,7 +17,7 @@ def hello():
 
 @app.route('/api/detail', methods=['POST'])
 def post_create():
-
+#recup
     name = request.form['name']
     seller = request.form['seller']
     price = request.form['price']
