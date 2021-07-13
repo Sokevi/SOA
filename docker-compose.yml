@@ -1,0 +1,54 @@
+version: '3.5'
+
+volumes: 
+  notify-db-data:
+  delivery-db-data:
+
+networks: 
+  esbay-network:
+    driver: bridge
+
+services:
+  notify:
+    build:
+      context: ./Seller_notify
+    ports:
+      - 8082:5000
+    depends_on: 
+      - notify_db
+    restart: always
+    networks: 
+      - esbay-network
+  
+  notify_db:
+    image: mysql:5.7.22
+    volumes: 
+      - notify-db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=notify
+    restart: always
+    networks:
+      - esbay-network
+
+  delivery:
+    build:
+      context: ./delivery_detail
+    ports:
+      - 8081:5000
+    depends_on: 
+      - delivery_db
+    restart: always
+    networks: 
+      - esbay-network
+  
+  delivery_db:
+    image: mysql:5.7.22
+    volumes: 
+      - delivery-db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=delivery
+    restart: always
+    networks:
+      - esbay-network
